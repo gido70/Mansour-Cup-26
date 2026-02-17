@@ -34,13 +34,12 @@
           <span style="opacity:.7">🔎</span>
           <input id="searchInput" placeholder="ابحث..." />
         </div>
-        
       </div>
     </div>
   </div>
 
   <div class="container">
-    
+
     <div class="hero-banner">
       <img src="assets/img/bg-hero.jpg" alt="بطولة كأس منصور بن زايد 2026" />
     </div>
@@ -48,13 +47,16 @@
     <div class="hero">
       <div class="hero-inner">
         <div>
-          <h1 data-tournament>بطولة كأس منصور بن زايد 2026</h1>
-          <p>
-            هذا الموقع يقرأ بياناته من Google Sheets عبر روابط CSV فقط (بدون JSON / gviz).
-            إدخال النتائج يتم من لوحة التحكم الداخلية عبر تصدير CSV (نسخ/تنزيل) ثم لصقه في Google Sheets.
+          <h1 class="main-title" data-tournament>بطولة كأس منصور بن زايد 2026</h1>
+
+          <p class="hero-subtitle">
+            النسخة الثالثة عشر من البطولة، التي تلعب على مدار 20 يوماً، وتتكون البطولة من 116 فريقاً و240 لاعباً و32 مباراة،
+            نظام البطولة يبدأ بدوري المجموعات (16) ثم دوري ربع النهائي (8) بخروج المغلوب ثم دوري نصف النهائي (4) ثم مباراة الثالث والرابع ثم المباراة النهائية.
           </p>
+
           <div id="loadError" class="note hidden" style="margin-top:10px; color:#ffd1d1"></div>
         </div>
+
         <div class="kpis">
           <div class="kpi"><b id="kpiMatches">—</b><span>مباراة</span></div>
           <div class="kpi"><b id="kpiGoals">—</b><span>هدف</span></div>
@@ -85,14 +87,11 @@
                     <th>النتيجة</th>
                     <th>الفريق 2</th>
                     <th>المرحلة</th>
-              <th>أفضل لاعب</th>
+                    <th>أفضل لاعب</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
               </table>
-            </div>
-            <div class="note" style="margin-top:10px">
-              ملاحظة: إذا لم تظهر النتائج، تأكد أنك أدخلت home_score و away_score في ملف matches.csv.
             </div>
           </div>
         </div>
@@ -129,32 +128,30 @@
                 <tbody></tbody>
               </table>
             </div>
-            <div class="note" style="margin-top:10px">
-              يحتسب الأهداف من ملف goals.csv (goal_type = G).
-            </div>
           </div>
         </div>
       </section>
-    <section id="secCards" class="section">
-      <div class="section-head">
-        <h2>البطاقات</h2>
-        <span class="muted" id="cardsCount"></span>
-      </div>
-      <div class="card">
-        <table class="tbl" id="tblCards">
-          <thead>
-            <tr>
-              <th>اللاعب</th>
-              <th>الفريق</th>
-              <th>أصفر</th>
-              <th>أحمر</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
 
+      <!-- Cards -->
+      <section id="secCards" class="section">
+        <div class="section-head">
+          <h2>البطاقات</h2>
+          <span class="muted" id="cardsCount"></span>
+        </div>
+        <div class="card">
+          <table class="tbl" id="tblCards">
+            <thead>
+              <tr>
+                <th>اللاعب</th>
+                <th>الفريق</th>
+                <th>أصفر</th>
+                <th>أحمر</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
 
       <!-- Teams -->
       <section id="secTeams" class="section">
@@ -211,7 +208,6 @@
 
     <div class="footer">
       <div>© <span data-tournament></span> — واجهة RTL جاهزة للنشر على GitHub Pages</div>
-      <div class="note">تنبيه: رابط Admin ظاهر هنا لتسهيل الوصول أثناء البناء. يمكنك إخفاؤه لاحقًا بإزالة الرابط من الهيدر.</div>
     </div>
   </div>
 
