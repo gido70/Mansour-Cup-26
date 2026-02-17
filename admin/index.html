@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="لوحة تحكم داخلية (مخفية) لإدخال النتائج وتصدير CSV." />
+  <title>Admin</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body>
+  <div class="header">
+    <div class="header-inner container">
+      <div class="brand">
+        <img src="../assets/img/logo-tournament.png" alt="Logo" onerror="this.style.display='none'"/>
+        <div class="titles">
+          <b>لوحة التحكم</b>
+          <span data-tournament>بطولة</span>
+        </div>
+      </div>
+      <div class="right-tools">
+        <a class="badge" href="../">العودة للموقع</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div id="adminLocked" class="card">
+      <div class="card-h"><b>دخول لوحة التحكم</b></div>
+      <div class="card-b">
+        <p class="note">ستظهر نافذة لإدخال كلمة المرور. غيّر كلمة المرور من: <code>assets/js/config.js</code></p>
+      </div>
+    </div>
+
+    <div id="adminApp" class="hidden">
+      <div class="hero" style="margin-top:0">
+        <div class="hero-inner">
+          <div>
+            <h1 style="margin:0">Admin — إدخال النتائج والأحداث</h1>
+            <p class="note">
+              هذه اللوحة لا تكتب مباشرة إلى Google Sheets (بدون JSON / API).
+              بدلًا من ذلك: تُخزّن إدخالاتك محليًا (LocalStorage) ثم تُصدّر CSV (نسخ/تنزيل) لتلصقه في Google Sheets.
+            </p>
+            <div class="actions">
+              <button class="btn secondary" id="btnLogout">خروج</button>
+              <button class="btn secondary" id="btnClearAll">مسح كل القوائم</button>
+            </div>
+          </div>
+          <div class="kpis">
+            <div class="kpi"><b id="cntMatches">0</b><span>نتائج في قائمة التصدير</span></div>
+            <div class="kpi"><b id="cntGoals">0</b><span>أهداف في قائمة التصدير</span></div>
+            <div class="kpi"><b id="cntCards">0</b><span>كروت في قائمة التصدير</span></div>
+            <div class="kpi"><b>CSV</b><span>نسخ/تنزيل</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="card-h"><b>1) تسجيل نتيجة مباراة</b></div>
+          <div class="card-b">
+            <form id="frmMatch" class="form">
+              <div>
+                <label>match_id (إجباري)</label>
+                <input id="m_match_id" placeholder="مثال: M001" required />
+              </div>
+              <div>
+                <label>المجموعة</label>
+                <select id="m_group_id"></select>
+              </div>
+              <div>
+                <label>المرحلة</label>
+                <input id="m_stage" placeholder="مثال: دور المجموعات" />
+              </div>
+              <div>
+                <label>الملعب</label>
+                <input id="m_venue" placeholder="مثال: ملعب 1" />
+              </div>
+              <div>
+                <label>التاريخ (YYYY-MM-DD)</label>
+                <input id="m_date" placeholder="2026-03-10" />
+              </div>
+              <div>
+                <label>الوقت (HH:MM)</label>
+                <input id="m_time" placeholder="21:00" />
+              </div>
+              <div>
+                <label>الفريق (Home)</label>
+                <select id="m_home"></select>
+              </div>
+              <div>
+                <label>الفريق (Away)</label>
+                <select id="m_away"></select>
+              </div>
+              <div>
+                <label>Home Score</label>
+                <input id="m_hs" inputmode="numeric" placeholder="0" />
+              </div>
+              <div>
+                <label>Away Score</label>
+                <input id="m_as" inputmode="numeric" placeholder="0" />
+              </div>
+              <div class="full">
+                <label>match_label (اختياري)</label>
+                <input id="m_label" placeholder="مثال: A1 — فريق1 × فريق2" />
+              </div>
+              <div class="full actions">
+                <button class="btn" type="submit">إضافة إلى قائمة التصدير</button>
+                <button class="btn secondary" type="reset">تفريغ</button>
+              </div>
+            </form>
+
+            <div class="actions" style="margin-top:12px">
+              <button class="btn" id="btnCopyMatches">نسخ CSV (النتائج)</button>
+              <button class="btn secondary" id="btnDownloadMatches">تنزيل CSV (النتائج)</button>
+            </div>
+            <p class="note" style="margin-top:10px">
+              بعد التصدير: ألصق الصفوف في Google Sheets داخل ورقة matches.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-h"><b>2) تسجيل هدف</b></div>
+          <div class="card-b">
+            <form id="frmGoal" class="form">
+              <div>
+                <label>المباراة</label>
+                <select id="g_match_id"></select>
+              </div>
+              <div>
+                <label>اللاعب</label>
+                <select id="g_player_id"></select>
+              </div>
+              <div>
+                <label>الدقيقة</label>
+                <input id="g_minute" placeholder="مثال: 37" />
+              </div>
+              <div>
+                <label>النوع</label>
+                <select id="g_type">
+                  <option value="G">هدف</option>
+                  <option value="OG">هدف عكسي</option>
+                  <option value="P">ركلة جزاء</option>
+                </select>
+              </div>
+              <div class="full">
+                <label>ملاحظة</label>
+                <input id="g_note" placeholder="اختياري" />
+              </div>
+              <div class="full actions">
+                <button class="btn" type="submit">إضافة إلى قائمة التصدير</button>
+                <button class="btn secondary" type="reset">تفريغ</button>
+              </div>
+              <input id="g_goal_id" class="hidden" />
+            </form>
+
+            <div class="actions" style="margin-top:12px">
+              <button class="btn" id="btnCopyGoals">نسخ CSV (الأهداف)</button>
+              <button class="btn secondary" id="btnDownloadGoals">تنزيل CSV (الأهداف)</button>
+            </div>
+            <p class="note" style="margin-top:10px">
+              بعد التصدير: ألصق الصفوف في Google Sheets داخل ورقة goals.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-h"><b>3) تسجيل بطاقة</b></div>
+          <div class="card-b">
+            <form id="frmCard" class="form">
+              <div>
+                <label>المباراة</label>
+                <select id="c_match_id"></select>
+              </div>
+              <div>
+                <label>اللاعب</label>
+                <select id="c_player_id"></select>
+              </div>
+              <div>
+                <label>لون البطاقة</label>
+                <select id="c_color">
+                  <option value="">— اختر —</option>
+                  <option value="Y">صفراء</option>
+                  <option value="R">حمراء</option>
+                  <option value="2Y">صفراء ثانية</option>
+                </select>
+              </div>
+              <div>
+                <label>الدقيقة</label>
+                <input id="c_minute" placeholder="مثال: 82" />
+              </div>
+              <div class="full">
+                <label>ملاحظة</label>
+                <input id="c_note" placeholder="اختياري" />
+              </div>
+              <div class="full actions">
+                <button class="btn" type="submit">إضافة إلى قائمة التصدير</button>
+                <button class="btn secondary" type="reset">تفريغ</button>
+              </div>
+              <input id="c_card_id" class="hidden" />
+            </form>
+
+            <div class="actions" style="margin-top:12px">
+              <button class="btn" id="btnCopyCards">نسخ CSV (الكروت)</button>
+              <button class="btn secondary" id="btnDownloadCards">تنزيل CSV (الكروت)</button>
+            </div>
+            <p class="note" style="margin-top:10px">
+              بعد التصدير: ألصق الصفوف في Google Sheets داخل ورقة cards.
+            </p>
+          </div>
+        </div>
+
+        <div class="card" id="qWrap">
+          <div class="card-h"><b>قائمة التصدير (آخر ما أدخلته)</b></div>
+          <div class="card-b">
+            <b style="display:block; margin-bottom:8px">نتائج مباريات</b>
+            <div class="table-wrap" style="margin-bottom:12px">
+              <table id="qMatches">
+                <thead>
+                  <tr><th>المباراة</th><th>النتيجة</th><th>التاريخ</th><th>إجراء</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <b style="display:block; margin-bottom:8px">الأهداف</b>
+            <div class="table-wrap" style="margin-bottom:12px">
+              <table id="qGoals">
+                <thead>
+                  <tr><th>match_id</th><th>player_id</th><th>دقيقة</th><th>نوع</th><th>إجراء</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <b style="display:block; margin-bottom:8px">الكروت</b>
+            <div class="table-wrap">
+              <table id="qCards">
+                <thead>
+                  <tr><th>match_id</th><th>player_id</th><th>لون</th><th>دقيقة</th><th>إجراء</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <p class="note" style="margin-top:10px">
+              يمكنك حذف أي سطر قبل التصدير. التصدير يولّد CSV جاهز للصق في Google Sheets.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer">
+        <div class="note">
+          حماية كلمة المرور هنا "واجهة فقط" (Client-side). لا تعتبرها حماية أمنية حقيقية.
+          إذا أردت حماية حقيقية، نحتاج استضافة تدعم Authentication (لكن هذا خارج شرط "Sheets + CSV فقط").
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/helpers.js"></script>
+  <script src="../assets/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="موقع عرض للجمهور: مباريات، مجموعات، ترتيب، هدافين، فرق، لاعبين." />
+  <title>بطولة</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <div class="header">
+    <div class="header-inner container">
+      <div class="brand">
+        <img class="logo logo-cup" src="assets/img/logo-cup-white.png" alt="Logo" onerror="this.style.display='none'"/>
+        <img class="logo logo-committee" src="assets/img/logo-committee-white.png" alt="Logo" onerror="this.style.display='none'"/>
+        <div class="titles">
+          <b data-tournament>بطولة</b>
+          <span>عرض للجمهور — <span data-season>2026</span></span>
+        </div>
+      </div>
+
+      <div class="nav" role="navigation" aria-label="Sections">
+        <button class="active" data-target="secMatches">المباريات</button>
+        <button data-target="secGroups">المجموعات</button>
+        <button data-target="secStandings">الترتيب</button>
+        <button data-target="secScorers">الهدافون</button>
+        <button data-target="secCards">البطاقات</button>
+        <button data-target="secTeams">الفرق</button>
+        <button data-target="secPlayers">اللاعبون</button>
+      </div>
+
+      <div class="right-tools">
+        <div class="search" title="بحث">
+          <span style="opacity:.7">🔎</span>
+          <input id="searchInput" placeholder="ابحث..." />
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    
+    <div class="hero-banner">
+      <img src="assets/img/bg-hero.jpg" alt="بطولة كأس منصور بن زايد 2026" />
+    </div>
+
+    <div class="hero">
+      <div class="hero-inner">
+        <div>
+          <h1 data-tournament>بطولة كأس منصور بن زايد 2026</h1>
+          <p>
+            هذا الموقع يقرأ بياناته من Google Sheets عبر روابط CSV فقط (بدون JSON / gviz).
+            إدخال النتائج يتم من لوحة التحكم الداخلية عبر تصدير CSV (نسخ/تنزيل) ثم لصقه في Google Sheets.
+          </p>
+          <div id="loadError" class="note hidden" style="margin-top:10px; color:#ffd1d1"></div>
+        </div>
+        <div class="kpis">
+          <div class="kpi"><b id="kpiMatches">—</b><span>مباراة</span></div>
+          <div class="kpi"><b id="kpiGoals">—</b><span>هدف</span></div>
+          <div class="kpi"><b id="kpiTeams">—</b><span>فريق</span></div>
+          <div class="kpi"><b id="kpiPlayers">—</b><span>لاعب</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- Matches -->
+      <section id="secMatches" class="section active">
+        <div class="card">
+          <div class="card-h">
+            <b>المباريات</b>
+            <span class="badge" id="matchesCount">—</span>
+          </div>
+          <div class="card-b">
+            <div class="table-wrap">
+              <table id="tblMatches">
+                <thead>
+                  <tr>
+                    <th>الكود</th>
+                    <th>المجموعة</th>
+                    <th>التاريخ/الوقت</th>
+                    <th>الملعب</th>
+                    <th>الفريق 1</th>
+                    <th>النتيجة</th>
+                    <th>الفريق 2</th>
+                    <th>المرحلة</th>
+              <th>أفضل لاعب</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div class="note" style="margin-top:10px">
+              ملاحظة: إذا لم تظهر النتائج، تأكد أنك أدخلت home_score و away_score في ملف matches.csv.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Groups -->
+      <section id="secGroups" class="section">
+        <div id="groupsWrap" style="display:grid; gap:14px"></div>
+      </section>
+
+      <!-- Standings -->
+      <section id="secStandings" class="section">
+        <div id="standingsWrap" style="display:grid; gap:14px"></div>
+      </section>
+
+      <!-- Scorers -->
+      <section id="secScorers" class="section">
+        <div class="card">
+          <div class="card-h">
+            <b>الهدافون</b>
+            <span class="badge" id="scorersCount">—</span>
+          </div>
+          <div class="card-b">
+            <div class="table-wrap">
+              <table id="tblScorers">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>اللاعب</th>
+                    <th>الفريق</th>
+                    <th>الأهداف</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div class="note" style="margin-top:10px">
+              يحتسب الأهداف من ملف goals.csv (goal_type = G).
+            </div>
+          </div>
+        </div>
+      </section>
+    <section id="secCards" class="section">
+      <div class="section-head">
+        <h2>البطاقات</h2>
+        <span class="muted" id="cardsCount"></span>
+      </div>
+      <div class="card">
+        <table class="tbl" id="tblCards">
+          <thead>
+            <tr>
+              <th>اللاعب</th>
+              <th>الفريق</th>
+              <th>أصفر</th>
+              <th>أحمر</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+
+      <!-- Teams -->
+      <section id="secTeams" class="section">
+        <div class="card">
+          <div class="card-h">
+            <b>الفرق</b>
+            <span class="badge" id="teamsCount">—</span>
+          </div>
+          <div class="card-b">
+            <div class="table-wrap">
+              <table id="tblTeams">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>الفريق</th>
+                    <th>المجموعة</th>
+                    <th>الاختصار</th>
+                    <th>المدرب</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Players -->
+      <section id="secPlayers" class="section">
+        <div class="card">
+          <div class="card-h">
+            <b>اللاعبون</b>
+            <span class="badge" id="playersCount">—</span>
+          </div>
+          <div class="card-b">
+            <div class="table-wrap">
+              <table id="tblPlayers">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>اللاعب</th>
+                    <th>الفريق</th>
+                    <th>المركز</th>
+                    <th>رقم القميص</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">
+      <div>© <span data-tournament></span> — واجهة RTL جاهزة للنشر على GitHub Pages</div>
+      <div class="note">تنبيه: رابط Admin ظاهر هنا لتسهيل الوصول أثناء البناء. يمكنك إخفاؤه لاحقًا بإزالة الرابط من الهيدر.</div>
+    </div>
+  </div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/helpers.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
