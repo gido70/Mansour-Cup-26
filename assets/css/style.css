@@ -1,78 +1,33 @@
-/* ===== LUXURY HERO TITLE – +20% ===== */
-
-.hero h1{display:none;}
+/* ====== TITLE LUXURY 3D ====== */
 
 .main-title{
   margin:0;
-  font-size:82px;
+  font-size:78px;
   font-weight:900;
-  letter-spacing:3px;
-  text-align:center;
+  letter-spacing:2.5px;
   line-height:1.05;
+  text-align:center;
 
-  background: linear-gradient(
-      180deg,
-      #ffffff 0%,
-      #e6f7ff 25%,
-      #8fd3ff 50%,
-      #3fa9ff 75%,
-      #0f5bd6 100%
-  );
+  background: linear-gradient(180deg, #ffffff 0%, #e8f7ff 25%, #9fdcff 55%, #3fa9ff 78%, #0f5bd6 100%);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 
   text-shadow:
     0 3px 0 rgba(0,0,0,.35),
-    0 6px 0 rgba(0,0,0,.30),
-    0 10px 0 rgba(0,0,0,.22),
-    0 18px 28px rgba(0,0,0,.65),
-    0 0 30px rgba(10,160,255,.60),
-    0 0 60px rgba(10,160,255,.40);
-
-  animation: glowPulse 3s ease-in-out infinite alternate;
+    0 7px 0 rgba(0,0,0,.28),
+    0 12px 0 rgba(0,0,0,.20),
+    0 18px 28px rgba(0,0,0,.62),
+    0 0 34px rgba(10,160,255,.55),
+    0 0 70px rgba(10,160,255,.40);
 }
 
-@keyframes glowPulse{
-  from{
-    text-shadow:
-      0 3px 0 rgba(0,0,0,.35),
-      0 6px 0 rgba(0,0,0,.30),
-      0 10px 0 rgba(0,0,0,.22),
-      0 18px 28px rgba(0,0,0,.65),
-      0 0 25px rgba(10,160,255,.55),
-      0 0 50px rgba(10,160,255,.35);
-  }
-  to{
-    text-shadow:
-      0 3px 0 rgba(0,0,0,.35),
-      0 6px 0 rgba(0,0,0,.30),
-      0 10px 0 rgba(0,0,0,.22),
-      0 18px 28px rgba(0,0,0,.65),
-      0 0 40px rgba(10,160,255,.75),
-      0 0 80px rgba(10,160,255,.50);
-  }
-}
-
-.hero-subtitle{
+.tournament-desc{
   margin: 22px auto 0;
   max-width: 1100px;
   text-align:center;
-  font-size:23px;
+  font-size:22px;
   font-weight:700;
   line-height:2;
   color:#e6f6ff;
   text-shadow: 0 10px 25px rgba(0,0,0,.45);
-}
-
-/* KPI stronger */
-.kpi{
-  background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.18));
-  backdrop-filter: blur(4px);
-}
-.kpi b{font-size:26px}
-
-/* Mobile */
-@media (max-width: 900px){
-  .main-title{font-size:46px; letter-spacing:1px}
-  .hero-subtitle{font-size:17px}
 }
